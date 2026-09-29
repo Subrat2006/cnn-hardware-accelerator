@@ -1,0 +1,38 @@
+Synthetic test-vector generation summary
+=========================================
+Random seed: 42
+
+Expected classification scores (raw int32):
+  class 0: 418
+  class 1: 1341
+  class 2: 1628
+  class 3: -4045
+  class 4: -815
+  class 5: -2557
+  class 6: 3165
+  class 7: -902
+  class 8: -498
+  class 9: 193
+
+Predicted class (argmax): 6
+
+Post-ReLU activation sparsity (fraction of exact zeros in
+each layer's OUTPUT feature map, before the next pooling step):
+  conv1 output : 36.5%
+  conv2 output : 53.7%
+  fc1   output : 59.2%
+
+NOTE -- these are NOT the same number as the hardware's
+PERF_SKIP-derived sparsity percentage. Max pooling means the
+next layer's MAC array sees fewer zeros than a layer's raw
+output has (a 2x2 window is zero only if all four inputs were
+zero), so the fraction of MAC operations actually zero-gated
+in hardware is generally LOWER than these raw output-zero
+fractions once pooling sits in between. For the exact,
+hardware-accurate MAC/skip counts (matching PERF_MACS/
+PERF_SKIP), run: python cycle_model.py
+
+Also: these are placeholder/random weights for RTL functional
+verification, not a trained classifier -- sparsity numbers here
+are illustrative of the zero-gating mechanism, not a claim about
+a real trained LeNet-5's sparsity.
